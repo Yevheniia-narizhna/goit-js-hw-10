@@ -9,18 +9,11 @@ const dataMinutes = document.querySelector('[data-minutes]');
 const dataSeconds = document.querySelector('[data-seconds]');
 const calendar = document.querySelector('#datetime-picker');
 const startBtn = document.querySelector('[data-start-timer]');
-startBtn.disabled = true;
 
 const TIMER_DELAY = 1000;
 let intervalId = null;
 let selectedDate = null;
 let currentDate = null;
-
-Report.info(
-  '👋 Greeting, my Friend!',
-  'Please, choose a date and click on start',
-  'Okay'
-);
 
 flatpickr(calendar, {
   enableTime: true,
@@ -29,17 +22,11 @@ flatpickr(calendar, {
   minuteIncrement: 1,
   onClose(selectedDates) {
     if (selectedDates[0].getTime() < Date.now()) {
-      Report.failure(
-        '🥺 Ooops...',
-        'Please, choose a date in the future and remember: "Knowledge rests not upon truth alone, but upon error also." - Carl Gustav Jung',
-        'Okay'
-      );
-    } else {
-      Report.success(
-        '🥰 Congratulation! Click on start!',
-        '"Do not try to become a person of success but try to become a person of value." <br/><br/>- Albert Einstein',
-        'Okay'
-      );
+      iziToast.error({
+        title: 'Error',
+        message: 'Please choose a date in the future',
+      });
+
       startBtn.disabled = false;
       const setTimer = () => {
         selectedDate = selectedDates[0].getTime();
@@ -62,11 +49,7 @@ const timer = {
 
       if (delta <= 0) {
         this.stop();
-        Report.info(
-          '👏 Congratulation! Timer stopped!',
-          'Please, if you want to start timer, choose a date and click on start or reload this page',
-          'Okay'
-        );
+
         return;
       }
       const { days, hours, minutes, seconds } = this.convertMs(delta);
@@ -95,6 +78,7 @@ const timer = {
     const minutes = this.addLeadingZero(
       Math.floor(((ms % day) % hour) / minute)
     );
+
     const seconds = this.addLeadingZero(
       Math.floor((((ms % day) % hour) % minute) / second)
     );
