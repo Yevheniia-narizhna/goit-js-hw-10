@@ -42,7 +42,6 @@ const timer = {
       calendar.disabled = true;
       currentDate = Date.now();
       const delta = selectedDate - currentDate;
-      updateTimerface(convertMs(delta));
 
       if (delta <= 0) {
         this.stop();
