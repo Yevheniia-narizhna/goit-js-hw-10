@@ -3,12 +3,8 @@ import 'flatpickr/dist/flatpickr.min.css';
 import iziToast from 'izitoast';
 import 'izitoast/dist/css/iziToast.min.css';
 
-const dataDays = document.querySelector('[data-days]');
-const dataHours = document.querySelector('[data-hours]');
-const dataMinutes = document.querySelector('[data-minutes]');
-const dataSeconds = document.querySelector('[data-seconds]');
 const calendar = document.querySelector('#datetime-picker');
-const startBtn = document.querySelector('[data-start-timer]');
+const startBtn = document.querySelector('[data-start]');
 
 const TIMER_DELAY = 1000;
 let intervalId = null;
@@ -46,6 +42,7 @@ const timer = {
       calendar.disabled = true;
       currentDate = Date.now();
       const delta = selectedDate - currentDate;
+      updateTimerface(convertMs(delta));
 
       if (delta <= 0) {
         this.stop();
@@ -53,10 +50,14 @@ const timer = {
         return;
       }
       const { days, hours, minutes, seconds } = this.convertMs(delta);
-      dataDays.textContent = this.addLeadingZero(days);
-      dataHours.textContent = this.addLeadingZero(hours);
-      dataMinutes.textContent = this.addLeadingZero(minutes);
-      dataSeconds.textContent = this.addLeadingZero(seconds);
+      this.rootSelector.querySelector('[data-days]').textContent =
+        this.addLeadingZero(days);
+      this.rootSelector.querySelector('[data-hours]').textContent =
+        this.addLeadingZero(hours);
+      this.rootSelector.querySelector('[data-minutes]').textContent =
+        this.addLeadingZero(minutes);
+      this.rootSelector.querySelector('[data-seconds]').textContent =
+        this.addLeadingZero(seconds);
     }, TIMER_DELAY);
   },
 
